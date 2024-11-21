@@ -2,6 +2,7 @@
 
 ## CECS 327 - Intro to Networking and Distributed Systems  
 **Assignment 8: Build an End-to-End IoT System**  
+**Authors:**Natalia Argumedo, Eric Cuevas
 
 ---
 
