@@ -1,5 +1,12 @@
 import socket
 
+# define valid queries
+VALID_QUERIES = [
+    "What is the average moisture inside my kitchen fridge in the past three hours?",
+    "What is the average water consumption per cycle in my smart dishwasher?",
+    "Which device consumed more electricity among my three IoT devices?"
+]
+
 def start_client():
     """
     - connects to the server using a TCP connection
@@ -31,33 +38,31 @@ def start_client():
             client_socket.connect((server_ip, server_port))
             print(f"Connected to {server_ip}:{server_port}")
 
+            print("Valid Queries:")
+            for query in VALID_QUERIES:
+                print(f"- {query}")
+            print("\nType 'exit' to quit the client.\n")
+            
             # send and receive messages in a loop
             while True:
-                message = input("Enter the message to send (or type 'exit' to quit): ").strip()
+                query = input("Enter your query: ").strip()
                 
-                # validates that the message is not empty
-                if not message:
-                    print("Message cannot be blank.")
-                    continue  # don't send blank messages
-                
-                if message.lower() == 'exit':
+                # handle exit command
+                if query.lower() == 'exit':
                     print("Exiting the client.")
-                    break  # exit the loop if user types 'exit'
+                    break # exit the loop if user types 'exit'
 
-                try:
-                    # send message to the server
-                    client_socket.send(message.encode())
+                # validate the query
+                if query not in VALID_QUERIES:
+                    print("\nSorry, this query cannot be processed.")
+                    print("Please try one of the following:")
+                    for valid_query in VALID_QUERIES:
+                        print(f"- {valid_query}")
+                    print()
+                    continue
 
-                    # receive the response from the server
-                    response = client_socket.recv(1024)
-                    if not response:
-                        print("Server closed the connection.")
-                        break  # if no response, the server closed the connection
-                    print(f"Server response: {response.decode()}") # display the server's response
-
-                except socket.error as e:
-                    print(f"Error during communication: {e}")
-                    break  # handle any communication errors
+                # send the query to the server
+                client_socket.send(query.encode())
 
             # close the client socket after exiting the loop
             client_socket.close()
@@ -66,7 +71,7 @@ def start_client():
         except socket.error as e:
             # handle errors such as connection failure or invalid ip/port
             print(f"Error: {e}")
-            print("Please enter a valid IP address and port.")
+            print("Please enter a valid IP address and port.\n")
 
 if __name__ == "__main__":
     # start the echo client
