@@ -38,6 +38,7 @@ def start_client():
             client_socket.connect((server_ip, server_port))
             print(f"Connected to {server_ip}:{server_port}")
 
+            # display the valid queries to the user
             print("Valid Queries:")
             for query in VALID_QUERIES:
                 print(f"- {query}")
@@ -63,6 +64,15 @@ def start_client():
 
                 # send the query to the server
                 client_socket.send(query.encode())
+
+                # receive the response from the server
+                response = client_socket.recv(1024).decode()
+                if not response:
+                    print("Server closed the connection.")
+                    break # exit the loop if server closes the connection
+
+                # display the server's response
+                print(f"Server response: {response}\n")
 
             # close the client socket after exiting the loop
             client_socket.close()
