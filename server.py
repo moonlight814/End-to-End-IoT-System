@@ -75,7 +75,7 @@ def process_query(query, db):
             # Calculate and return average
             if readings:
                 avg_moisture = sum(readings) / len(readings) * 0.75  # RH% conversion
-                return f"Average Relative Humidity: {avg_moisture:.2f}% (PST)"
+                return f"Average Relative Humidity: {avg_moisture:.2f}% "
             return "No data available for the past three hours."
 
 
@@ -87,7 +87,7 @@ def process_query(query, db):
             readings = [float(doc["payload"]["Float Switch - Water Consumption Sensor"]) for doc in water_data]
             if readings:
                 avg_water = sum(readings) / len(readings) * 0.264172  # Convert liters to gallons
-                return f"Average Water Consumption: {avg_water:.2f} gallons (PST)"
+                return f"Average Water Consumption: {avg_water:.2f} gallons"
             return "No data available for the dishwasher."
 
         elif query == VALID_QUERIES[2]:  # Electricity usage query
@@ -154,7 +154,7 @@ def process_electricity_usage(db):
         # Get device name or fallback to board_name
         device_name = board_name_to_device.get(board_name, f"Unknown Device ({board_name})")
 
-        return f"{device_name} consumed the most electricity: {total_kwh:.2f} kWh (PST)"
+        return f"{device_name} consumed the most electricity: {total_kwh:.2f} kWh"
     except Exception as e:
         return f"Error processing electricity usage query: {e}"
 
