@@ -40,25 +40,35 @@ def start_client():
 
             # display the valid queries to the user
             print("Valid Queries:")
-            for query in VALID_QUERIES:
-                print(f"- {query}")
+            for i, query in enumerate(VALID_QUERIES, start=1):
+                print(f"{i}. {query}")
             print("\nType 'exit' to quit the client.\n")
             
             # send and receive messages in a loop
             while True:
-                query = input("Enter your query: ").strip()
+                user_input = input("Enter your query number or type your query: ").strip()
                 
                 # handle exit command
-                if query.lower() == 'exit':
+                if user_input.lower() == 'exit':
                     print("Exiting the client.")
                     break # exit the loop if user types 'exit'
 
-                # validate the query
+                # validate the input
+                if user_input.isdigit():
+                    query_index = int(user_input) - 1
+                    if 0 <= query_index < len(VALID_QUERIES):
+                        query = VALID_QUERIES[query_index]
+                    else:
+                        print("Invalid query number. Please choose a valid number.\n")
+                        continue
+                else:
+                    query = user_input
+                
                 if query not in VALID_QUERIES:
                     print("\nSorry, this query cannot be processed.")
                     print("Please try one of the following:")
-                    for valid_query in VALID_QUERIES:
-                        print(f"- {valid_query}")
+                    for i, valid_query in enumerate(VALID_QUERIES, start=1):
+                        print(f"{i}. {valid_query}")
                     print()
                     continue
 
